@@ -37,5 +37,7 @@ fixing a bug or an issue.
 3) perf(performance): 
 Use this when your code change makes the program run faster or use less memory.
 4) style(formatting): 
+5) chore(maintainance): 
+Use this for background tasks that don't change the actual Python source code, like updating .gitignore, requirements.txt, or Docker configs.Example: chore: pin scikit-learn to version 1.4.2
 formatted existing code.
 ```
