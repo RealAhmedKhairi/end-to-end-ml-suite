@@ -1,0 +1,10 @@
+# Ignore virtual environments and cache
+venv/
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+
+# Ignore large raw datasets (keep insurance.csv, ignore Intel images & raw folders)
+images/data/
+text/data/
+*.zip

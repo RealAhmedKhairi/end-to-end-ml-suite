@@ -4,3 +4,25 @@ Using these datasets:
 1. Nurmerical (https://www.kaggle.com/datasets/mirichoi0218/insurance)
 2. Images (https://www.kaggle.com/datasets/puneet6060/intel-image-classification)
 3. Text (https://github.com/derekgreene/bbc-datasets)
+
+
+How to get started with development:
+# For linux / macOS
+
+```
+git clone https://github.com/RealAhmedKhairi/end-to-end-ml-suite.git
+cd end-to-end-ml-suite
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+# For windows
+
+```
+git clone https://github.com/RealAhmedKhairi/end-to-end-ml-suite.git
+cd end-to-end-ml-suite
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+```
