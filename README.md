@@ -6,8 +6,8 @@ Using these datasets:
 3. Text (https://github.com/derekgreene/bbc-datasets)
 
 
-How to get started with development:
-# For linux / macOS
+# How to get started with development:
+*For linux / macOS*
 
 ```
 git clone https://github.com/RealAhmedKhairi/end-to-end-ml-suite.git
@@ -17,7 +17,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-# For windows
+*For windows*
 
 ```
 git clone https://github.com/RealAhmedKhairi/end-to-end-ml-suite.git
