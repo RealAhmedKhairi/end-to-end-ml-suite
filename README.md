@@ -5,6 +5,7 @@ Using these datasets:
 2. Images (https://www.kaggle.com/datasets/puneet6060/intel-image-classification)
 3. Text (https://github.com/derekgreene/bbc-datasets)
 
+**Using python 3.12** 
 
 # How to get started with development:
 *For linux / macOS*
@@ -25,4 +26,16 @@ cd end-to-end-ml-suite
 python -m venv .venv
 .venv\Scripts\Activate.ps1
 pip install -r requirements.txt
+```
+
+# Commit conventions to use: 
+```
+1) feat(feature): 
+when adding new code or a new feature.
+2) fix: 
+fixing a bug or an issue.
+3) perf(performance): 
+Use this when your code change makes the program run faster or use less memory.
+4) style(formatting): 
+formatted existing code.
 ```
