@@ -3,15 +3,10 @@ import pandas as pd
 import numpy as np 
 import matplotlib.pyplot as plt
 import cv2 as cv 
+from processor import load_df
 
-data_dir = Path(__file__).parent / "dataset/seg"
-row = [] 
-for class_d in sorted(data_dir.iterdir()) :
-    if class_d.is_dir():
-        for img_p in class_d.glob("*") :
-            row.append({"path":str(img_p),"label":class_d.name})
 
-df = pd.DataFrame(row) 
+df = load_df 
 
 print ("num of img is ", len(df)) 
 print (df["label"].unique()) 

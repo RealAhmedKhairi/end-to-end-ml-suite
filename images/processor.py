@@ -3,15 +3,20 @@ import pandas as pd
 import numpy as np 
 import cv2 as cv 
 from sklearn.preprocessing import LabelEncoder 
+from sklearn.model_selection import train_test_split
 
-data_dir = Path(__file__).parent / "dataset/seg"
-row = [] 
-for class_d in sorted(data_dir.iterdir()) :
-    if class_d.is_dir():
-        for img_p in class_d.glob("*") :
-            row.append({"path":str(img_p),"label":class_d.name})
 
-df = pd.DataFrame(row) 
+def load_df():
+    data_dir = Path(__file__).parent / "dataset/seg"
+    row = [] 
+    for class_d in sorted(data_dir.iterdir()) :
+        if class_d.is_dir():
+            for img_p in class_d.glob("*") :
+                row.append({"path":str(img_p),"label":class_d.name})
+    df = pd.DataFrame(row) 
+    return df
+
+df = load_df 
 
 df_sample = (df.groupby("label")
              .sample(n=1000, random_state=42)
@@ -39,3 +44,12 @@ for pth in df_sample["path"]:
 x = np.array(images)
 le = LabelEncoder()
 y = le.fit_transform(df_sample["label"])
+
+
+
+
+x_train, x_temp, y_train, y_temp = train_test_split(x, y,test_size=.30 , random_state= 42 , stratify=y)
+
+x_val, x_test , y_val, y_test = train_test_split(x_temp, y_temp,test_size=.50 , random_state= 42 , stratify=y_temp)
+
+
