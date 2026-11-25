@@ -6,7 +6,7 @@ import cv2 as cv
 from processor import load_df
 
 
-df = load_df 
+df = load_df ()
 
 print ("num of img is ", len(df)) 
 print (df["label"].unique()) 

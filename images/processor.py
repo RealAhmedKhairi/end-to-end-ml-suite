@@ -16,7 +16,7 @@ def load_df():
     df = pd.DataFrame(row) 
     return df
 
-df = load_df 
+df = load_df ()
 
 df_sample = (df.groupby("label")
              .sample(n=1000, random_state=42)
