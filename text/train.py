@@ -3,7 +3,7 @@ from preprocessing import load_bbc, clean_text
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 
 df = load_bbc(r"dataset\bbc")
 df = df.drop_duplicates(subset="text", ignore_index=True)
@@ -25,12 +25,29 @@ X_test_transformed = tfidf.transform(X_test)
 # print(score)
 
 C_values = [0.001, 0.01, 0.1, 1, 10, 100]
+scores = {} # i thought of a sedikian idea where i want to get the best C out of 
+# the for loop based on its score so i thought of creating a dictionary where it
+# holds the C values as keys, and the scores as values for these keys, and later on
+# we fetch the best score out of the dictionary and automatically its key will be with it (the best C value) 
 
 for c in C_values :
     lgr = LogisticRegression(C=c, random_state=42, max_iter=100)
     lgr.fit(X_train_vectorized, y_train)
     score = lgr.score(X_val_transformed, y_val)
-    print(f"score with C = {c} is {score}")
+    scores[c] = score 
+    # print(f"score with C = {c} is {score}")
+
+best_C = max(scores, key=scores.get)
+# print(best_C)
+
+best_lgr = LogisticRegression(C=best_C, random_state=42, max_iter=100)
+
+best_lgr.fit(X_train_vectorized, y_train)
+y_pred = best_lgr.predict(X_test_transformed)
+print(accuracy_score(y_test, y_pred))
+print(confusion_matrix(y_test, y_pred))
+print(classification_report(y_test, y_pred))
+
 # btw best C is 1.0, after output results (accuracy = 0.9780)
 
 # print(len(tfidf.vocabulary_))
