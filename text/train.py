@@ -19,13 +19,19 @@ X_train_vectorized = tfidf.fit_transform(X_train)
 X_val_transformed = tfidf.transform(X_val)
 X_test_transformed = tfidf.transform(X_test)
 
-lgr = LogisticRegression(C=1.0, random_state=42, max_iter=100)
+# lgr = LogisticRegression(C=1.0, random_state=42, max_iter=100)
+# lgr.fit(X_train_vectorized, y_train)
+# score = lgr.score(X_val_transformed, y_val)
+# print(score)
 
-lgr.fit(X_train_vectorized, y_train)
-score = lgr.score(X_val_transformed, y_val)
-print(score)
+C_values = [0.001, 0.01, 0.1, 1, 10, 100]
 
-
+for c in C_values :
+    lgr = LogisticRegression(C=c, random_state=42, max_iter=100)
+    lgr.fit(X_train_vectorized, y_train)
+    score = lgr.score(X_val_transformed, y_val)
+    print(f"score with C = {c} is {score}")
+# btw best C is 1.0, after output results (accuracy = 0.9780)
 
 # print(len(tfidf.vocabulary_))
 # print(X_train_vectorized.shape)
