@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+
 from processor import load_data
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.metrics import (
