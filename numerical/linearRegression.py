@@ -1,5 +1,4 @@
-# We use the os module to interact with the operating system,
-# create directories, and manage file paths.
+# import libraries 
 import os
 import joblib
 import numpy as np
@@ -16,38 +15,30 @@ from sklearn.metrics import (
 )
 
 
-# This function creates the Linear Regression model and trains it on the training data.
-# It has no hyperparameters to tune, so there is no tuning step before training.
+# create and train Linear regression model
 def train_linear_regression(X_train, y_train):
 
-    # Create the Linear Regression model.
     lr_model = LinearRegression()
 
-    # Train the model: it learns one weight per feature from the training data only.
     lr_model.fit(X_train, y_train)
 
     return lr_model
 
 
-# This function evaluates a trained model on a given set
-# using MAE, RMSE, and R-squared metrics.
+# we did a function evaluate_regression_model by using MAE, RMSE, R2 
 def evaluate_regression_model(model, X, y):
 
-    # Generate predictions using the trained model.
+    # After finishing training, we make prediction
     preds = model.predict(X)
 
-    # Calculate Mean Absolute Error (MAE).
     mae = mean_absolute_error(y, preds)
 
-    # Calculate Root Mean Squared Error (RMSE).
-    rmse = np.sqrt(
-        mean_squared_error(y, preds)
-    )
-
-    # Calculate R-squared to measure model performance.
+    rmse = np.sqrt( mean_squared_error(y, preds))
+ 
     r2 = r2_score(y, preds)
 
-    # Store all evaluation metrics in a dictionary.
+   # we store in Dictionary 
+    
     metrics = {
         "MAE": mae,
         "RMSE": rmse,
@@ -56,20 +47,18 @@ def evaluate_regression_model(model, X, y):
 
     return preds, metrics
 
-# This function creates and saves a scatter plot
-# comparing actual target values with predicted values.
-# It also adds an ideal prediction reference line.
+# create a scatter plot to compare between actual vs prediction 
 def plot_actual_vs_pred(
     y_test, y_pred, model_title, output_path
 ):
 
-    # Create the plots directory automatically before saving the figure.
+   # Create the plots folder if it doesn't exist
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
-    # Create a figure with a specified size.
+   # size w=7 , h=7
     plt.figure(figsize=(7, 6))
 
-    # Plot actual values against predicted values.
+    # Plot y_test on x-axis and y_pred on y_axis
     plt.scatter(
         y_test, y_pred,
         alpha=0.65,
@@ -77,11 +66,11 @@ def plot_actual_vs_pred(
         linewidth=0.4
     )
 
-    # Determine the minimum and maximum values for the reference line.
+   # Get the min، max values to draw the reference line(red line)
     min_val = min(y_test.min(), y_pred.min())
     max_val = max(y_test.max(), y_pred.max())
 
-    # Draw the ideal prediction line where predicted values equal actual values.
+    # Draw red dashed line represent ideal prediction
     plt.plot(
         [min_val, max_val],
         [min_val, max_val],
@@ -89,43 +78,38 @@ def plot_actual_vs_pred(
         label="Ideal Fit (y_pred = y_test)"
     )
 
-    # Add labels and title to the plot.
+    # Add labels and title to the plot
     plt.xlabel("Actual Charges")
     plt.ylabel("Predicted Charges")
     plt.title(model_title)
 
-    # Display the legend and adjust the layout.
+    # Display the legend and adjust the layout
     plt.legend()
     plt.tight_layout()
 
-    # Save the plot as an image with high resolution.
+    # Save the plot 
     plt.savefig(output_path, dpi=150)
 
-    # Close the figure to release memory.
+    # to release memory
     plt.close()
 
 
-# This function saves the trained Linear Regression model as a Joblib file
-# so it can be loaded and reused later (for example by the GUI).
+# save Linear regression (trained) as a joblib file for GUI
 def save_model(lr_model, models_dir="models"):
 
-    # Create the output directory if it does not exist.
     os.makedirs(models_dir, exist_ok=True)
-
-    # Save the trained Linear Regression model.
+    
     joblib.dump(
         lr_model,
         os.path.join(models_dir, "linear_regression_model.joblib")
     )
 
 
-# Main pipeline: This function runs the complete Linear Regression workflow.
-# It loads preprocessed data, trains the model, evaluates its performance,
-# generates a plot, and saves the model.
+# This function runs the complete Linear Regression workflow.
+# First loads preprocessed data, trains the model, evaluates its performance,
+# and then generates a plot, and saves the model.
 def run_linear_regression_pipeline():
 
-    # Load the preprocessed and scaled data
-    # using the shared load_data() function from the processor module.
     (
         X_train,
         X_val,
@@ -134,22 +118,22 @@ def run_linear_regression_pipeline():
         y_val,
         y_test,
         _        # scaler we don't need it
-    ) = load_data()
+    ) = load_data()   # using load_data() function from the processor.py
 
 
-    # Train the Linear Regression model using the training data.
+    # Train the Linear Regression model 
     lr_model = train_linear_regression(X_train, y_train)
 
-    # Check the model on the validation set (it is only used as a check, not for tuning).
+    # Evaluate the model on the validation set and display the MAE.
     _, val_metrics = evaluate_regression_model(lr_model, X_val, y_val)
     print(f"Validation MAE = {val_metrics['MAE']:.2f}")
 
-    # Evaluate the trained model on the test set (done once, at the end).
+    # Evaluate the trained model on the test set 
     lr_preds, lr_metrics = evaluate_regression_model(
         lr_model, X_test, y_test
     )
 
-    # Generate and save the Linear Regression Actual vs Predicted plot.
+    # Generate and save the Linear Regression Actual vs Predicted plot
     plot_actual_vs_pred(
         y_test,
         lr_preds,
@@ -160,7 +144,7 @@ def run_linear_regression_pipeline():
     # Save the trained Linear Regression model.
     save_model(lr_model, models_dir="models")
 
-    # Create a summary table containing the evaluation metrics.
+    # Create a summary table containing the evaluation metrics (Model,MAE,RMSE,R2)
     summary_df = pd.DataFrame([
         {
             "Model": "Linear Regression",
@@ -168,7 +152,7 @@ def run_linear_regression_pipeline():
         }
     ])
 
-    # Display the final evaluation results.
+    # Display summary table results.
     print("\nLinear Regression Test Set Evaluation Summary:")
     print(summary_df.to_string(index=False))
 
