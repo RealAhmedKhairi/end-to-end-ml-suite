@@ -42,20 +42,22 @@ def load_data():
     y = le.fit_transform(df_sample["label"])
     x_train, x_temp, y_train, y_temp = train_test_split(x, y,test_size=.30 , random_state= 42 , stratify=y)
     x_val, x_test , y_val, y_test = train_test_split(x_temp, y_temp,test_size=.50 , random_state= 42 , stratify=y_temp)
+
+    x_train_flat=x_train.reshape(len(x_train), -1)
+    x_test_flat=x_test.reshape(len(x_test), -1)
+    x_val_flat=x_val.reshape(len(x_val), -1)
+
+    scaler =StandardScaler()
+
+    x_train_scaled = scaler.fit_transform(x_train_flat)
+    x_test_scaled = scaler.transform(x_test_flat)
+    x_val_scaled = scaler.transform(x_val_flat)
     
-    return x_train, x_val, x_test, y_train, y_val, y_test, le
+    return x_train_scaled, x_val_scaled, x_test_scaled, y_train, y_val, y_test, le, scaler
 
-
+  
 if __name__ == "__main__":
-    x_train, x_val, x_test, y_train, y_val, y_test, le = load_data()
+    x_train_scaled, x_val_scaled, x_test_scaled, y_train, y_val, y_test, le, scaler = load_data()
     
 
-x_train_flat=x_train.reshape(len(x_train), -1)
-x_test_flat=x_test.reshape(len(x_test), -1)
-x_val_flat=x_val.reshape(len(x_val), -1)
 
-scaler =StandardScaler()
-
-x_train_scaled = scaler.fit_transform(x_train_flat)
-x_test_scaled = scaler.transform(x_test_flat)
-x_val_scaled = scaler.transform(x_val_flat)
