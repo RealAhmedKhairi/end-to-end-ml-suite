@@ -4,8 +4,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+from sklearn.svm import LinearSVC
 
-df = load_bbc(r"dataset\bbc")
+df = load_bbc(r"dataset/bbc")
 df = df.drop_duplicates(subset="text", ignore_index=True)
 df["clean_text"] = df["text"].apply(clean_text)
 
@@ -56,5 +57,33 @@ print(classification_report(y_test, y_pred))
 # print(y_train.value_counts(normalize=True))
 # print(y_val.value_counts(normalize=True))
 # print(y_test.value_counts(normalize=True))
+
+
+
+#SVM section 
+
+svm_scores = {}
+for c in C_values :
+    svm = LinearSVC(C=c , random_state=42 , dual="auto")
+    svm.fit(X_train_vectorized , y_train) 
+    val_score= svm.score(X_val_transformed , y_val)
+    svm_scores[c] = val_score 
+    # print(f"LinearSVC validation accuracy with C={c}: {val_score:.4f}")
+
+
+best_svm_C = max(svm_scores, key=svm_scores.get)
+# print(f"Best C for LinearSVC: {best_svm_C} (Val Accuracy: {svm_scores[best_svm_C]:.4f})")
+
+best_svm = LinearSVC(C=best_svm_C, random_state=42, dual="auto")
+best_svm.fit(X_train_vectorized, y_train)
+
+svm_y_pred = best_svm.predict(X_test_transformed)
+print("LinearSVC Test Accuracy:", accuracy_score(y_test, svm_y_pred))
+print(confusion_matrix(y_test, svm_y_pred))
+print(classification_report(y_test, svm_y_pred))
+
+
+
+
 
 # %%
