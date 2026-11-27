@@ -1,11 +1,13 @@
 #%%
+import os
+import joblib
 from preprocessing import load_bbc, clean_text
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 
-df = load_bbc(r"dataset\bbc")
+df = load_bbc(os.path.join(os.path.dirname(__file__), "dataset", "bbc"))
 df = df.drop_duplicates(subset="text", ignore_index=True)
 df["clean_text"] = df["text"].apply(clean_text)
 
@@ -56,5 +58,10 @@ print(classification_report(y_test, y_pred))
 # print(y_train.value_counts(normalize=True))
 # print(y_val.value_counts(normalize=True))
 # print(y_test.value_counts(normalize=True))
+
+models_dir = os.path.join(os.path.dirname(__file__), "..", "models")
+os.makedirs(models_dir, exist_ok=True)
+joblib.dump(tfidf, os.path.join(models_dir, "text_tfidf.joblib"))
+joblib.dump(best_lgr, os.path.join(models_dir, "text_lr_model.joblib"))
 
 # %%

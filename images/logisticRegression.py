@@ -30,6 +30,15 @@ def tune_logistic_regression(x_train, y_train, x_val, y_val):
 
 
 if  __name__ == "__main__":
+    import os
+    import joblib
+
     x_train, x_val, x_test, y_train, y_val, y_test, le, scaler = load_data()
     best_lr_model, best_c, best_val_acc = tune_logistic_regression(x_train, y_train, x_val, y_val)
+
+    models_dir = os.path.join(os.path.dirname(__file__), "..", "models")
+    os.makedirs(models_dir, exist_ok=True)
+    joblib.dump(best_lr_model, os.path.join(models_dir, "image_lr_model.joblib"))
+    joblib.dump(scaler, os.path.join(models_dir, "image_scaler.joblib"))
+    joblib.dump(le, os.path.join(models_dir, "image_label_encoder.joblib"))
 

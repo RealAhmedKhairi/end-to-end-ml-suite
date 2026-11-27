@@ -34,7 +34,16 @@ def tune_knn(x_train, y_train, x_val, y_val):
     return best_knn_model, best_k, best_val_acc
 
 if  __name__ == "__main__":
+    import os
+    import joblib
+
     x_train, x_val, x_test, y_train, y_val, y_test, le, scaler = load_data()
     best_knn_model, best_k, best_val_acc = tune_knn(x_train, y_train, x_val, y_val)
+
+    models_dir = os.path.join(os.path.dirname(__file__), "..", "models")
+    os.makedirs(models_dir, exist_ok=True)
+    joblib.dump(best_knn_model, os.path.join(models_dir, "image_knn_model.joblib"))
+    joblib.dump(scaler, os.path.join(models_dir, "image_scaler.joblib"))
+    joblib.dump(le, os.path.join(models_dir, "image_label_encoder.joblib"))
     
 
