@@ -8,3 +8,6 @@ __pycache__/
 images/data/
 text/data/
 *.zip
+
+# Ignore heavy image KNN model (over GitHub 100MB limit - run images/knn.py locally)
+models/image_knn_model.joblib
